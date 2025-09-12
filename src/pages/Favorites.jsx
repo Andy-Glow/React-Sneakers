@@ -1,28 +1,23 @@
+import React from 'react';
 import Card from '../components/Card';
+import AppContext from '../context';
 
 
-function Favorites({ items, onAddToFavorite, onAddToCart }) {
+function Favorites() {
+    const { favorites, onAddToFavorite } = React.useContext(AppContext);
+
     return (
-        <div>
             <div className="content">
                 <div className="all-sneakers-search">
                     <h1>Мои закладки</h1>
                 </div>
 
                 <div className="sneakers">
-                    {
-                        items.map((item) => (
-                            <Card
-                                key={item.id}
-                                favorited={true}
-                                onFavorite={onAddToFavorite}
-                                onPlus={(obj) => onAddToCart(obj)}
-                                {...item}
-                            />
-                        ))}
+                    {favorites.map((item, index) => (
+          <Card key={index} favorited={true} onFavorite={onAddToFavorite} {...item} />
+        ))}
                 </div>
             </div>
-        </div>
     );
 }
 

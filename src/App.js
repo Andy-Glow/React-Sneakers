@@ -3,8 +3,10 @@ import axios from 'axios';
 import Header from './components/Header';
 import Drawer from './components/Drawer';
 import Home from './pages/Home';
+import Orders from './pages/Orders';
 import Favorites from './pages/Favorites';
 import { Route, Routes } from 'react-router-dom';
+import AppContext from './context'
 
 
 
@@ -103,24 +105,44 @@ function App() {
   };
 
   return (
+    <AppContext.Provider
+      value={{
+        items,
+        cartItems,
+        favorites,
+        isItemAdded,
+        isLoading,
+        onAddToFavorite,
+        onAddToCart,
+        setCartOpened,
+        setCartItems,
+      }}>
     <div className="wrapper">
-      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} />}
+      {cartOpened && <Drawer items={cartItems} onClose={() => setCartOpened(false)} onRemove={onRemoveItem} opened={cartOpened} />}
 
       <Header onClickCart={() => setCartOpened(true)} />
 
       <Routes>
         <Route path="/" element={
-          <Home items={items} searchValue={searchValue} setSearchValue={setSearchValue}
-            onAddToFavorite={onAddToFavorite} onChangeSearchInput={onChangeSearchInput}
-            onAddToCart={onAddToCart} cartItems={cartItems}
+          <Home
+            items={items}
+            cartItems={cartItems}
+            searchValue={searchValue}
+            setSearchValue={setSearchValue}
+            onChangeSearchInput={onChangeSearchInput}
+            onAddToFavorite={onAddToFavorite}
+            onAddToCart={onAddToCart}
+            isLoading={isLoading}
           />} />
         <Route path="/favorites" element={
-          <Favorites items={favorites} onAddToFavorite={onAddToFavorite} />
+          <Favorites />
         } />
-        <Route path="/orders" />
+        <Route path="/orders" element={
+          <Orders />} />
       </Routes>
 
     </div>
+    </AppContext.Provider>
   );
 };
 
